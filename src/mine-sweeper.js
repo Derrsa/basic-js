@@ -23,9 +23,52 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+
+  // Helper function to check if a cell is valid
+  function isValidCell(row, col) {
+    return row >= 0 && row < rows && col >= 0 && col < cols;
+  }
+
+  // Helper function to count neighboring mines
+  function countNeighboringMines(row, col) {
+    let count = 0;
+
+    // Define neighboring directions
+    const directions = [
+      [-1, -1], [-1, 0], [-1, 1],
+      [0, -1],           [0, 1],
+      [1, -1], [1, 0], [1, 1]
+    ];
+
+    for (const [dr, dc] of directions) {
+      const newRow = row + dr;
+      const newCol = col + dc;
+
+      if (isValidCell(newRow, newCol) && matrix[newRow][newCol]) {
+        count++;
+      }
+    }
+
+    return count;
+  }
+
+  // Create the Minesweeper game setup
+  const result = [];
+
+  for (let row = 0; row < rows; row++) {
+    const newRow = [];
+
+    for (let col = 0; col < cols; col++) {
+      newRow.push(countNeighboringMines(row, col));
+    }
+
+    result.push(newRow);
+  }
+
+  return result;
 }
 
 module.exports = {
